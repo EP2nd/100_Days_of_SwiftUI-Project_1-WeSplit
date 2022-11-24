@@ -42,8 +42,6 @@ struct ContentView: View {
         
         return localCurrency
     }
-    
-    /* static func currency<Value>(code: String) -> FloatingPointFormatStyle<Value>.Currency where Value : BinaryFloatingPoint */
 
     var body: some View {
         NavigationView {
@@ -51,8 +49,8 @@ struct ContentView: View {
                 Section {
                     /// Bonus challenge:
                     TextField("Amount", value: $checkAmount, format: currencyFormatter)
-                    .keyboardType(.decimalPad)
-                    .focused($amountIsFocused)
+                        .keyboardType(.decimalPad)
+                        .focused($amountIsFocused)
                     Picker("Number of people", selection: $numberOfPeople) {
                         ForEach(2 ..< 100) {
                             Text("\($0) people")
@@ -87,6 +85,8 @@ struct ContentView: View {
                 Section {
                     /// Bonus challenge:
                     Text(totalAmount, format: currencyFormatter)
+                    /// Project 3, challenge 1:
+                        .foregroundColor(tipPercentage == 0 ? .red : .primary)
                 } header: {
                     Text("Total amount:")
                 }
