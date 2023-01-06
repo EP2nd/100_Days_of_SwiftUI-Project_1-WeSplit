@@ -13,34 +13,22 @@ struct ContentView: View {
     @State private var tipPercentage = 20
     
     @FocusState private var amountIsFocused: Bool
-
-    /// Challenge 3:
-    //let tipPercentages = [10, 15, 20, 25, 0]
-    var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
-        let tipSelection = Double(tipPercentage)
-        
-        let tipValue = checkAmount / 100 * tipSelection
-        let grandTotal = checkAmount + tipValue
-        let amountPerPerson = grandTotal / peopleCount
-        
-        return amountPerPerson
-    }
+    
+    /// Bonus challenge:
+    let localCurrency: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currencyCode ?? "USD")
+    
     /// Challenge 2:
     var totalAmount: Double {
         let tipSelection = Double(tipPercentage)
-        
         let tipValue = checkAmount / 100 * tipSelection
-        let totalAmount = checkAmount + tipValue
         
-        return totalAmount
+        return checkAmount + tipValue
     }
-    
-    /// Bonus challenge:
-    var currencyFormatter: FloatingPointFormatStyle<Double>.Currency {
-        let localCurrency: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currencyCode ?? "USD")
-        
-        return localCurrency
+
+    /// Challenge 3:
+//  let tipPercentages = [10, 15, 20, 25, 0]
+    var totalPerPerson: Double {
+        totalAmount / Double(numberOfPeople + 2)
     }
 
     var body: some View {
@@ -48,7 +36,7 @@ struct ContentView: View {
             Form {
                 Section {
                     /// Bonus challenge:
-                    TextField("Amount", value: $checkAmount, format: currencyFormatter)
+                    TextField("Amount", value: $checkAmount, format: localCurrency)
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                     Picker("Number of people", selection: $numberOfPeople) {
@@ -56,7 +44,7 @@ struct ContentView: View {
                             Text("\($0) people")
                         }
                     }
-                    //.pickerStyle(.navigationLink)
+//                  .pickerStyle(.navigationLink)
                 }
                 Section {
                     Picker("Tip percentage", selection: $tipPercentage) {
@@ -69,26 +57,26 @@ struct ContentView: View {
                         }
                     }
                     /// Challenge 3:
-                    //.pickerStyle(.segmented)
+//                  .pickerStyle(.segmented)
                     .pickerStyle(.navigationLink)
                 } header: {
                     Text("How much tip do you want to leave?")
                 }
-                Section {
-                    /// Bonus challenge:
-                    Text(totalPerPerson, format: currencyFormatter)
-                /// Challenge 1:
-                } header: {
-                    Text("Amount per person:")
-                }
                 /// Challenge 2:
                 Section {
                     /// Bonus challenge:
-                    Text(totalAmount, format: currencyFormatter)
+                    Text(totalAmount, format: localCurrency)
                     /// Project 3, challenge 1:
                         .foregroundColor(tipPercentage == 0 ? .red : .primary)
                 } header: {
                     Text("Total amount:")
+                }
+                Section {
+                    /// Bonus challenge:
+                    Text(totalPerPerson, format: localCurrency)
+                /// Challenge 1:
+                } header: {
+                    Text("Amount per person:")
                 }
             }
             .navigationTitle("WeSplit")
